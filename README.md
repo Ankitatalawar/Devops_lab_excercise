@@ -1,1 +1,1 @@
-# Devops_lab_excercise
+# Devops_lab_excercises
