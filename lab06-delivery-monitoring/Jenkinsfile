@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Start') {
+            steps {
+                echo 'Starting Delivery Monitoring pipeline'
+                sh 'date'
+            }
+        }
+        stage('Check Delivery Metrics App') {
+            steps {
+                sh 'curl -s http://host.docker.internal:8000/metrics | grep -E "^(total_deliveries|pending_deliveries|on_the_way_deliveries)"'
+            }
+        }
+        stage('Check Prometheus') {
+            steps {
+                sh 'curl -s http://host.docker.internal:9090/-/ready'
+            }
+        }
+        stage('Check Alert Rules') {
+            steps {
+                sh 'curl -s http://host.docker.internal:9090/api/v1/rules | head -c 600'
+            }
+        }
+    }
+}
